@@ -17,15 +17,6 @@ Un fan site de una sola página dedicado a Echidna, la Bruja de la Avaricia de *
 
 La música intenta comenzar al entrar. Si el navegador bloquea el sonido automático, arranca con la primera interacción o con el botón de música. La escena animada utiliza un video WebM sin sonido generado a partir del GIF original; inicia automáticamente salvo que esté activada la preferencia de movimiento reducido.
 
-## Vistas responsive
-
-Capturas reales de la versión compilada, a 1400, 768 y 375 píxeles de ancho.
-
-<p>
-  <img src="media/echidna-tablet.png" alt="Perfil de Echidna en tablet" width="480">
-  <img src="media/echidna-mobile.png" alt="Perfil de Echidna en móvil" width="235">
-</p>
-
 ## Ejecutar el proyecto
 
 Se necesita **Node.js 22.12 o superior** y npm. El proyecto se ha comprobado con Node.js 24.15.0.
