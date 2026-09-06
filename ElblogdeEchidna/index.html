@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Entra al santuario de Echidna, la Bruja de la Avaricia de Re:Zero. Un perfil interactivo con curiosidades, mariposas y una pequeña invitación al té.">
+    <meta name="theme-color" content="#191a20">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Echidna · Un té en el Santuario">
+    <meta property="og:description" content="La Bruja de la Avaricia tiene tiempo para otra pregunta. Descubre su mundo en este perfil interactivo de Re:Zero.">
+    <meta property="og:image" content="./src/assets/images/echidna-portrait.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Echidna · Un té en el Santuario | Re:Zero</title>
+    <link rel="icon" type="image/svg+xml" href="./echidna-icon.svg">
+    <link rel="stylesheet" href="./src/scss/style.scss">
+    <script type="module" src="./src/js/main.js"></script>
+</head>
+<body data-theme="lilac">
+    <a class="skip-link" href="#main">Saltar al personaje</a>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="./" aria-label="Echidna, inicio"><img src="./echidna-icon.svg" width="37" height="37" alt=""><span><strong>Re:ゼロ</strong><small>ECHIDNA FAN SPACE</small></span></a>
+            <nav class="chapter-nav" aria-label="Explorar el personaje">
+                <button type="button" data-chapter="profile" aria-pressed="true" aria-controls="profile-panel"><span>01</span> Su esencia</button>
+                <button type="button" data-chapter="secrets" aria-pressed="false" aria-controls="secrets-panel"><span>02</span> Curiosidades</button>
+                <button type="button" data-chapter="tea" aria-pressed="false" aria-controls="tea-panel"><span>03</span> Salón de té</button>
+            </nav>
+            <button class="motion-button" type="button" aria-label="Pausar animaciones" aria-pressed="false"><span aria-hidden="true">Ⅱ</span><span class="motion-label">En movimiento</span></button>
+            <div class="music-controls" role="group" aria-label="Música del salón">
+                <audio class="background-music" src="./src/assets/audio/music-loop.mp3" loop preload="auto"></audio>
+                <button class="music-toggle" type="button" aria-label="Reproducir música" aria-pressed="false"><span class="music-icon" aria-hidden="true">♪</span><span class="music-label">Activar música</span></button>
+                <input class="music-volume" type="range" min="0" max="100" step="1" value="35" aria-label="Volumen de la música" aria-valuetext="35 %">
+                <output class="music-level" aria-label="Volumen actual">35 %</output>
+            </div>
+        </header>
+        <main id="main">
+            <section class="character-sheet" aria-labelledby="character-name">
+                <div class="sheet-grain" aria-hidden="true"></div>
+                <div class="sheet-topline"><span><i aria-hidden="true"></i> DENTRO DEL SANTUARIO</span><span>PERSONAJE N.º 01 <b aria-hidden="true">↗</b></span></div>
+                <div class="character-copy">
+                    <div class="name-line"><span lang="ja">エキドナ</span><div class="palette" role="group" aria-label="Elegir ambiente"><button class="swatch swatch-lilac" type="button" data-theme="lilac" aria-label="Ambiente lavanda" aria-pressed="true"></button><button class="swatch swatch-ice" type="button" data-theme="ice" aria-label="Ambiente azul hielo" aria-pressed="false"></button><button class="swatch swatch-mint" type="button" data-theme="mint" aria-label="Ambiente menta" aria-pressed="false"></button></div></div>
+                    <h1 id="character-name">ECHIDNA<span aria-hidden="true">.</span></h1>
+                    <p class="character-alias"><span aria-hidden="true">✦</span> LA BRUJA DE LA AVARICIA</p>
+                    <div class="chapter-panels">
+                        <section class="chapter-panel" id="profile-panel" aria-labelledby="profile-title">
+                            <h2 id="profile-title">Su curiosidad no tiene fondo.</h2>
+                            <p>Una taza de té le basta para empezar una conversación. Echidna observa, pregunta y sonríe; detrás de sus modales delicados, desea comprender absolutamente todo.</p>
+                            <button class="read-file" type="button" data-open-file>Leer su expediente <span aria-hidden="true">↗</span></button>
+                        </section>
+                        <section class="chapter-panel" id="secrets-panel" aria-labelledby="secrets-title" hidden>
+                            <h2 id="secrets-title">El conocimiento es su tesoro.</h2>
+                            <p class="secret-text" aria-live="polite">Su avaricia no busca oro: Echidna quiere conocer cada fenómeno del mundo. Para ella, una respuesta siempre deja espacio para otra pregunta.</p>
+                            <div class="secret-controls"><button type="button" class="secret-prev" aria-label="Curiosidad anterior">←</button><span class="secret-count">01 / 04</span><button type="button" class="secret-next" aria-label="Siguiente curiosidad">→</button></div>
+                        </section>
+                        <section class="chapter-panel" id="tea-panel" aria-labelledby="tea-title" hidden>
+                            <h2 id="tea-title">Todavía queda sitio en la mesa.</h2>
+                            <p class="tea-reaction" aria-live="polite">Echidna espera junto a la tetera. Una visita, una taza y algo nuevo que descubrir. El té parece una buena manera de empezar.</p>
+                            <div class="tea-controls"><button type="button" class="pour-button"><span aria-hidden="true">♧</span> Servirle un té <span aria-hidden="true">↗</span></button><span class="tea-count" aria-live="polite">0 tazas</span></div>
+                        </section>
+                    </div>
+                    <div class="memory-cards" role="group" aria-label="Pequeñas puertas a su mundo">
+                        <button class="memory-card" type="button" data-chapter="secrets" aria-pressed="false" aria-controls="secrets-panel"><img src="./src/assets/images/echidna-portrait.webp" width="2148" height="1718" alt=""><span class="card-index">02 / DESCUBRIR</span><span class="card-title">Una mente<br>insaciable <b aria-hidden="true">↗</b></span></button>
+                        <button class="memory-card" type="button" data-chapter="tea" aria-pressed="false" aria-controls="tea-panel"><img src="./src/assets/images/echidna-tea-garden.webp" width="1920" height="1382" alt=""><span class="card-index">03 / VISITAR</span><span class="card-title">La hora<br>del té <b aria-hidden="true">↗</b></span></button>
+                    </div>
+                    <div class="character-facts"><span>RE:ZERO <b>/</b> MAAYA SAKAMOTO</span><button type="button" data-open-file aria-label="Abrir ficha de Echidna">Ficha de personaje <span aria-hidden="true">+</span></button></div>
+                </div>
+                <div class="character-stage">
+                    <span class="background-name" aria-hidden="true">GREED</span>
+                    <div class="magic-circle" aria-hidden="true"><span>知識</span></div>
+                    <div class="character-figure"><img class="character-image" src="./src/assets/images/echidna-character.png" alt="Echidna con su vestido negro, cabello blanco y una mariposa verde posada en la mano" width="1024" height="1536" fetchpriority="high"></div>
+                    <span class="character-sticker">demasiadas preguntas.<br><strong>nunca suficiente té.</strong><span aria-hidden="true">✳</span></span>
+                    <button class="butterfly-button" type="button" aria-label="Descubrir un pensamiento de Echidna"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M31 32C16 7 6 15 12 29c3 7 10 8 17 7-16 0-16 17-7 15 6-2 9-10 10-15ZM33 32C48 7 58 15 52 29c-3 7-10 8-17 7 16 0 16 17 7 15-6-2-9-10-10-15Z"/><path d="M32 26v18m0-16-6-8m6 8 6-8" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>psst…</span></button>
+                    <p class="butterfly-note" role="status" hidden></p>
+                    <div class="mini-player">
+                        <div class="player-top"><span><i aria-hidden="true"></i> EN EL SALÓN</span><span aria-hidden="true">↙</span></div>
+                        <video class="tea-animation" poster="./src/assets/images/tea-poster.webp" width="806" height="1080" autoplay muted loop playsinline preload="metadata" aria-label="Echidna espera frente a una taza de té en una escena animada"><source src="./src/assets/videos/tea-loop.webm" type="video/webm"></video>
+                        <button class="player-toggle" type="button" aria-pressed="false" aria-label="Reproducir escena animada"><span class="player-icon" aria-hidden="true">▷</span><span class="player-label">Reproducir escena</span></button>
+                    </div>
+                    <span class="handwritten" aria-hidden="true">Echidna <svg viewBox="0 0 120 20"><path d="M2 13Q60 1 114 8M9 19Q62 8 105 13" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
+                </div>
+                <div class="sheet-bottom"><span class="chapter-indicator">01 <i>/</i> 03</span><p>La siguiente pregunta podría cambiarlo todo.</p><button class="next-chapter" type="button">Seguir explorando <span aria-hidden="true">→</span></button></div>
+            </section>
+            <dialog class="character-dialog" aria-labelledby="file-title">
+                <button class="dialog-close" type="button" aria-label="Cerrar expediente">×</button>
+                <p class="file-label">ARCHIVO DEL SANTUARIO / 01</p><h2 id="file-title">Detrás de la <em>sonrisa.</em></h2>
+                <img src="./src/assets/images/echidna-expressions.webp" alt="Ilustración de Echidna con diferentes expresiones y atuendos" width="3541" height="2507" loading="lazy">
+                <p>Echidna es la Bruja de la Avaricia en <cite>Re:Zero − Starting Life in Another World</cite>. Su deseo de conocimiento la lleva a interesarse por los fenómenos del mundo y por las experiencias de quienes se cruzan con ella.</p>
+                <p>Subaru la conoce a través de una inesperada invitación al té durante el arco del Santuario. Su cabello blanco, su atuendo negro y la calma con la que conversa hacen que resulte tan reconocible como enigmática.</p>
+                <dl><div><dt>Nombre</dt><dd>Echidna / エキドナ</dd></div><div><dt>Epíteto</dt><dd>Bruja de la Avaricia</dd></div><div><dt>Voz japonesa</dt><dd>Maaya Sakamoto</dd></div><div><dt>Su mayor deseo</dt><dd>Comprenderlo todo</dd></div></dl>
+                <p class="file-sources">Perfil sin grandes spoilers. Fuentes oficiales: <a href="https://re-zero-anime.jp/tv/character/" target="_blank" rel="noreferrer">anime</a>, <a href="https://re-zero-anime.jp/tv/story/tv2.html" target="_blank" rel="noreferrer">Santuario</a> y <a href="https://re-zero.com/character/エキドナ/" target="_blank" rel="noreferrer">novela</a>. Las reacciones del juego de té son textos originales de este fan site.</p>
+            </dialog>
+        </main>
+        <footer class="site-footer"><p>HECHO DE TÉ, MARIPOSAS Y CURIOSIDAD <span aria-hidden="true">✳</span></p><span>Fan site no oficial · Re:Zero pertenece a sus respectivos titulares.</span><a href="https://re-zero-anime.jp/" target="_blank" rel="noreferrer">Universo Re:Zero ↗</a></footer>
+    </div>
+</body>
+</html>
