@@ -5,9 +5,9 @@ test('chapters, curiosity controls and character dialog work', async ({ page }) 
     await page.locator('.memory-card[data-chapter="secrets"]').click();
     await expect(page.locator('#secrets-panel')).toBeVisible();
     await page.locator('.secret-prev').click();
-    await expect(page.locator('.secret-count')).toHaveText('04 / 04');
+    await expect(page.locator('.secret-count')).toHaveText('06 / 06');
     await page.locator('.secret-next').click();
-    await expect(page.locator('.secret-count')).toHaveText('01 / 04');
+    await expect(page.locator('.secret-count')).toHaveText('01 / 06');
     await page.locator('.next-chapter').click();
     await expect(page.locator('#tea-panel')).toBeVisible();
     await page.locator('.next-chapter').click();
@@ -28,24 +28,6 @@ test('chapters, curiosity controls and character dialog work', async ({ page }) 
     await expect(dialog).not.toBeVisible();
 });
 
-test('tea has 99 distinct responses and resets to zero', async ({ page }) => {
-    await page.goto('/');
-    await page.locator('.chapter-nav [data-chapter="tea"]').click();
-    const reactions = new Set();
-    for (let count = 1; count <= 99; count++) {
-        await page.locator('.pour-button').click();
-        await expect(page.locator('.tea-count')).toHaveText(`${count} ${count === 1 ? 'taza' : 'tazas'}`);
-        reactions.add(await page.locator('.tea-reaction').textContent());
-    }
-    expect(reactions.size).toBe(99);
-    await page.locator('.pour-button').click();
-    await expect(page.locator('.tea-count')).toHaveText('0 tazas');
-    await expect(page.locator('.tea-reaction')).toContainText('nueva ronda');
-    await page.locator('.pour-button').click();
-    await expect(page.locator('.tea-count')).toHaveText('1 taza');
-    await expect(page.locator('.tea-reaction')).toHaveText([...reactions][0]);
-});
-
 test('themes persist and butterfly notes close', async ({ page }) => {
     await page.goto('/');
     for (const theme of ['ice', 'mint', 'lilac']) {
@@ -63,18 +45,28 @@ test('themes persist and butterfly notes close', async ({ page }) => {
     await expect(page.locator('.butterfly-note')).not.toBeVisible();
 });
 
-test('music plays after interaction and remembers mute and volume', async ({ page }) => {
+test('music starts only from its button and remembers mute and volume', async ({ page }) => {
     await page.goto('/');
     await page.locator('.chapter-nav [data-chapter="tea"]').click();
     const audio = page.locator('.background-music');
     const toggle = page.locator('.music-toggle');
     const volume = page.locator('.music-volume');
-    await expect.poll(() => audio.evaluate(element => !element.paused && element.currentTime > 0)).toBe(true);
+    await expect.poll(() => audio.evaluate(element => element.paused && element.currentTime === 0)).toBe(true);
+    await expect(toggle).toHaveAccessibleName('Activar música');
     await expect(volume).toHaveValue('35');
+    await page.keyboard.press('Enter');
+    await volume.focus();
+    await volume.press('ArrowRight');
+    await expect(volume).toHaveValue('36');
+    await expect.poll(() => audio.evaluate(element => element.paused && element.currentTime === 0)).toBe(true);
+    await toggle.click();
+    await expect.poll(() => audio.evaluate(element => !element.paused && element.currentTime > 0)).toBe(true);
     await toggle.click();
     await expect.poll(() => audio.evaluate(element => element.muted)).toBe(true);
     await page.reload();
     await expect.poll(() => audio.evaluate(element => element.muted)).toBe(true);
+    await expect.poll(() => audio.evaluate(element => element.paused)).toBe(true);
+    await expect(toggle).toHaveAccessibleName('Activar música');
     await toggle.click();
     await expect.poll(() => audio.evaluate(element => element.muted)).toBe(false);
     await volume.focus();
@@ -83,6 +75,7 @@ test('music plays after interaction and remembers mute and volume', async ({ pag
     await expect.poll(() => audio.evaluate(element => element.volume)).toBe(1);
     await page.reload();
     await expect(volume).toHaveValue('100');
+    await expect.poll(() => audio.evaluate(element => !element.paused)).toBe(true);
     await volume.focus();
     await volume.press('Home');
     await expect.poll(() => audio.evaluate(element => element.volume === 0 && element.muted)).toBe(true);

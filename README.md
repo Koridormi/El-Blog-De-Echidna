@@ -1,27 +1,31 @@
-# Echidna · Un té en el Santuario
+# Re:Zero Fan Space
 
-Un fan site de una sola página dedicado a Echidna, la Bruja de la Avaricia de **Re:Zero**. Un pequeño santuario interactivo con curiosidades del personaje, mariposas, música y una conversación que continúa taza a taza.
+Fan site de **Echidna, Emilia, Rem y Ram**, construido con HTML, JavaScript nativo, SCSS y Vite. Echidna es la página de inicio; los enlaces entre personajes funcionan también sin JavaScript.
 
-![Vista de escritorio del perfil de Echidna](media/echidna-desktop.png)
+![Perfil de Echidna en escritorio](media/echidna-desktop.png)
 
-## Dentro del santuario
+## Explorar y jugar
 
-- Tres capítulos: **Su esencia**, **Curiosidades** y **Salón de té**.
-- Juego con **99 reacciones originales**: después de la taza 99, el contador vuelve a 0 y comienza otra ronda.
-- Ambientes lavanda, azul hielo y menta; la selección se conserva entre visitas.
-- Música en bucle con silencio, volumen y preferencias guardadas.
-- Escena animada, mariposa interactiva y movimiento sutil del personaje.
-- Expediente del personaje con controles de cierre, clic exterior y tecla Escape.
-- Diseño responsive, navegación por teclado y respeto por la preferencia de movimiento reducido.
-- Metadatos básicos para buscadores y redes sociales, e icono SVG propio.
+Cada perfil comparte tres capítulos, seis curiosidades, un expediente ilustrado, temas de color y controles de movimiento y música.
 
-La música intenta comenzar al entrar. Si el navegador bloquea el sonido automático, arranca con la primera interacción o con el botón de música. La escena animada utiliza un video WebM sin sonido generado a partir del GIF original; inicia automáticamente salvo que esté activada la preferencia de movimiento reducido.
+| Personaje | Juego |
+| --- | --- |
+| Echidna | **El contrato de las tres runas**: deduce un orden secreto con pistas y hasta seis hipótesis. |
+| Emilia | **La memoria del hielo**: encuentra cuatro parejas en un tablero que cambia en cada partida. |
+| Rem | **La cocina de los pedidos**: prepara tres recetas distintas, ordena los ingredientes y corrige las bandejas. |
+| Ram | **El acertijo del viento**: despeja tres senderos con ráfagas en cruz y opción de deshacer. |
 
-## Ejecutar el proyecto
+Los juegos no tienen límite de tiempo y permiten reiniciar. Sus reglas y mensajes son creaciones del fan site, no contenido canónico del anime.
 
-Se necesita **Node.js 22.12 o superior** y npm. El proyecto se ha comprobado con Node.js 24.15.0.
+La música requiere una primera activación explícita. Después conserva activación, silencio y volumen entre personajes y pestañas; recupera la posición al navegar en la misma pestaña. Si el navegador bloquea la reanudación, el botón permite iniciarla de nuevo. Los temas y el audio utilizan `localStorage`; la posición del audio utiliza `sessionStorage`.
 
-Desde la raíz del repositorio:
+Echidna tiene una escena WebM sin sonido que se reproduce automáticamente salvo con movimiento reducido. Las escenas animadas de Emilia, Rem y Ram siguen pendientes y se identifican como placeholders.
+
+[Ver el juego de Echidna en móvil](media/echidna-contract-mobile.png)
+
+## Desarrollo
+
+Se recomienda **Node.js 22.12 o posterior**. Desde la raíz del repositorio:
 
 ```bash
 cd ElblogdeEchidna
@@ -29,89 +33,60 @@ npm ci
 npm run dev
 ```
 
-Abre [http://127.0.0.1:5173](http://127.0.0.1:5173). No hacen falta claves API, cuentas ni variables de entorno.
+Abre [http://127.0.0.1:5173](http://127.0.0.1:5173). No se necesitan claves API ni cuentas.
 
-| Comando | Función |
+| Comando | Resultado |
 | --- | --- |
-| `npm run dev` | Inicia Vite en el puerto 5173. |
-| `npm run build` | Genera la web de producción en `ElblogdeEchidna/dist/`. |
-| `npm run preview` | Permite revisar localmente la compilación. |
-| `npm test` | Ejecuta las pruebas de Playwright. |
-| `npx playwright test` | Ejecuta la misma suite directamente. |
-| `npm audit` | Consulta vulnerabilidades conocidas de las dependencias. |
+| `npm run dev` | Servidor local en el puerto 5173. |
+| `npm run build` | Compila las cuatro páginas en `dist/`. |
+| `npm run preview` | Sirve la compilación en local. |
+| `npx playwright test` | Ejecuta la suite completa. |
+| `npx playwright test --workers=1` | Ejecuta las mismas pruebas en serie para equipos con recursos limitados. |
 
-Todos los comandos de la tabla se ejecutan dentro de `ElblogdeEchidna/`.
+Si falta el navegador de pruebas, se instala con `npx playwright install chromium`. Todos estos comandos se ejecutan desde `ElblogdeEchidna/`.
 
-## Pruebas
+## Validación y accesibilidad
 
-Si Chromium todavía no está instalado para Playwright, prepáralo una vez:
+Las **35 pruebas** cubren juegos, victoria y reinicio, curiosidades, navegación, estructura de expedientes, metadatos, carga de recursos, audio, animación y teclado. Se comprueban 375, 767, 768, 1023, 1024, 1199, 1200, 1399 y 1400 px.
 
-```bash
-npx playwright install chromium
-```
+La interfaz incluye enlace para saltar al contenido, controles etiquetados, foco visible, mensajes de juego anunciados, imágenes con alternativas textuales, cierre de expedientes con Escape y respeto por movimiento reducido. Estas comprobaciones son una revisión básica, no una certificación completa de accesibilidad.
 
-Después:
-
-```bash
-npm run build
-npx playwright test
-```
-
-La suite contiene **16 pruebas**:
-
-- 9 comprobaciones responsive a 375, 767, 768, 1023, 1024, 1199, 1200, 1399 y 1400 px.
-- 7 comprobaciones de navegación, diálogo, 99 reacciones y reinicio, temas, mariposa, audio, animación, movimiento reducido y carga de recursos.
-
-Playwright inicia el servidor configurado en `127.0.0.1:5173` o reutiliza uno existente. Los resultados, capturas de fallos y trazas se generan en `test-results/` y quedan fuera de Git.
+Playwright inicia o reutiliza el servidor de `playwright.config.js`. Capturas de fallos y trazas quedan en `test-results/`, fuera de Git.
 
 ## Estructura
 
 ```text
-El-Blog-Echidna/
-├── ElblogdeEchidna/
-│   ├── index.html
-│   ├── public/
-│   │   └── echidna-icon.svg
-│   ├── src/
-│   │   ├── assets/
-│   │   │   ├── audio/music-loop.mp3
-│   │   │   ├── gifs/echidna-tea-source.gif
-│   │   │   ├── images/
-│   │   │   └── videos/tea-loop.webm
-│   │   ├── js/main.js
-│   │   └── scss/
-│   │       ├── base/
-│   │       └── style.scss
-│   ├── tests/
-│   │   ├── interactions.spec.js
-│   │   └── responsive.spec.js
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── playwright.config.js
-│   └── vite.config.js
-├── media/
-│   ├── echidna-desktop.png
-│   ├── echidna-mobile.png
-│   └── echidna-tablet.png
-├── .gitignore
-├── LICENSE
-└── README.md
+ElblogdeEchidna/
+├── index.html
+├── pages/characters/          # Emilia, Rem y Ram
+├── public/echidna-icon.svg
+├── src/
+│   ├── assets/
+│   │   ├── audio/            # Música compartida
+│   │   ├── images/           # Echidna y póster de su escena
+│   │   ├── characters/       # Ilustraciones por personaje
+│   │   └── videos/           # Escena WebM
+│   ├── js/
+│   │   ├── main.js           # Interacciones de Echidna
+│   │   ├── music.js          # Preferencias y reproducción compartidas
+│   │   └── characters/      # Perfiles y juegos
+│   └── scss/                # Plantilla común y ajustes de personajes
+└── tests/
+media/                       # Capturas de este README, en la raíz del repo
 ```
 
-HTML, JavaScript nativo y SCSS componen la interfaz; Vite se encarga del desarrollo y la compilación. No hay dependencias de ejecución externas. Los temas y ajustes de audio se guardan en `localStorage`; el contador del té empieza de nuevo al recargar.
+Los retratos `*-character.webp` conservan transparencia; `*-curiosities-card.webp`, `*-game-card.webp`, `echidna-contract-card.webp` y `*-dossier-scene.webp` tienen fondos ilustrados. Los prompts de generación se guardan junto a cada imagen. Se eliminaron imágenes obsoletas, PNG intermedios y el GIF original sin uso; se conserva el WebM que reproduce la web.
 
-## Recursos y publicación
+## SEO y publicación
 
-Los recursos tienen nombres descriptivos: `echidna-portrait.webp`, `echidna-tea-garden.webp`, `echidna-expressions.webp` y `echidna-character.png`. El GIF original se conserva para poder regenerar el WebM, pero no se descarga al visitar la web. El póster de la animación está en `src/assets/images/tea-poster.webp`.
+Las páginas incluyen títulos y descripciones propios, metadatos Open Graph y Twitter, idioma español y datos estructurados `WebPage`. Las imágenes sociales apuntan a recursos incluidos en la compilación.
 
-El archivo `echidna-character.prompt.txt` documenta la creación asistida por IA de la ilustración principal. Las capturas de este README se guardan exclusivamente en `media/`.
+Publica el contenido completo de `ElblogdeEchidna/dist/`. Cuando exista un dominio definitivo, añade las URL canónicas, `og:url` y las URL absolutas de imágenes sociales; también podrá generarse el sitemap. No se incluye un dominio ficticio. Si el alojamiento usa un subdirectorio, ajusta la base de Vite para ese destino antes de compilar.
 
-El repositorio incluye el archivo de bloqueo de npm. `.gitignore` excluye dependencias instaladas, compilaciones, resultados de pruebas, archivos temporales, configuración local y patrones habituales de credenciales. No se deben guardar secretos en el HTML, JavaScript ni recursos públicos: el navegador puede leerlos.
-
-Para alojar la web, utiliza el contenido de `ElblogdeEchidna/dist/` después de compilar. Si el alojamiento sirve desde un subdirectorio, configura la ruta base de Vite para ese destino. Los metadatos sociales deben revisarse con la URL pública definitiva.
+`.gitignore` excluye dependencias, compilaciones, resultados de pruebas y archivos locales o de credenciales. Todo recurso servido por el navegador es público.
 
 ## Créditos
 
-Fan site no oficial creado por **Koridormi**. Re:Zero y Echidna pertenecen a sus respectivos titulares. El perfil enlaza las fuentes oficiales del personaje; las respuestas del juego de té son textos originales del sitio.
+Fan site no oficial de **Koridormi**. Las fichas enlazan fuentes oficiales del [anime](https://re-zero-anime.jp/tv/character/) y la [novela](https://re-zero.com/). Las ilustraciones generadas con IA son interpretaciones artísticas, no fotogramas oficiales.
 
-El código del proyecto se distribuye bajo la [licencia MIT](LICENSE). Los recursos multimedia de terceros no se relicencian como MIT. Normalize.css conserva su aviso de licencia en el archivo fuente.
+Re:Zero y sus personajes pertenecen a sus respectivos titulares. El código se distribuye bajo la [licencia MIT](LICENSE); los recursos multimedia de terceros no se relicencian como MIT. Normalize.css conserva su aviso de licencia.

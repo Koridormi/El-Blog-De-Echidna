@@ -1,0 +1,87 @@
+import '../music.js';
+import './games.js';
+
+const character = document.body.dataset.character;
+const chapterNames = ['profile', 'secrets', 'tea'];
+const chapterButtons = [...document.querySelectorAll('[data-chapter]')];
+const chapterPanels = [...document.querySelectorAll('.chapter-panel')];
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+let activeChapter = 0;
+let motionPaused = motionPreference.matches;
+
+function selectChapter(name) {
+    activeChapter = chapterNames.indexOf(name);
+    chapterButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.chapter === name)));
+    chapterPanels.forEach(panel => { panel.hidden = panel.id !== name + '-panel'; });
+    document.querySelector('.chapter-indicator').firstChild.textContent = '0' + (activeChapter + 1) + ' ';
+    if (window.innerWidth < 768) document.querySelector('.chapter-panels').scrollIntoView({ block: 'center', behavior: motionPaused ? 'instant' : 'smooth' });
+}
+chapterButtons.forEach(button => button.addEventListener('click', () => selectChapter(button.dataset.chapter)));
+document.querySelector('.next-chapter').addEventListener('click', () => selectChapter(chapterNames[(activeChapter + 1) % chapterNames.length]));
+
+const themeButtons = [...document.querySelectorAll('.swatch')];
+function setTheme(theme) {
+    if (!themeButtons.some(button => button.dataset.theme === theme)) return;
+    document.body.dataset.theme = theme;
+    themeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.theme === theme)));
+}
+try { setTheme(localStorage.getItem('echidna-theme-' + character)); } catch {}
+themeButtons.forEach(button => button.addEventListener('click', () => {
+    setTheme(button.dataset.theme);
+    try { localStorage.setItem('echidna-theme-' + character, button.dataset.theme); } catch {}
+}));
+
+const dialog = document.querySelector('.character-dialog');
+document.querySelectorAll('[data-open-file]').forEach(button => button.addEventListener('click', () => dialog.showModal()));
+document.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
+dialog.addEventListener('click', event => {
+    const bounds = dialog.getBoundingClientRect();
+    if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
+});
+const secrets = [...dialog.querySelectorAll('details')];
+let secretIndex = 0;
+function showSecret(direction) {
+    secretIndex = (secretIndex + direction + secrets.length) % secrets.length;
+    document.querySelector('#secrets-title').textContent = secrets[secretIndex].querySelector('summary').textContent;
+    document.querySelector('.secret-text').textContent = secrets[secretIndex].querySelector('p').textContent;
+    document.querySelector('.secret-count').textContent = String(secretIndex + 1).padStart(2, '0') + ' / ' + String(secrets.length).padStart(2, '0');
+}
+document.querySelector('.secret-prev').addEventListener('click', () => showSecret(-1));
+document.querySelector('.secret-next').addEventListener('click', () => showSecret(1));
+
+const thoughts = {
+    emilia: ['Emilia observa un destello entre los cristales. Todavía queda sitio para uno más.', 'Emilia sonríe ante la visita. El siguiente intento puede traer una sorpresa.'],
+    rem: ['Rem comprueba la mesa una vez más. Siempre encuentra un pequeño detalle que cuidar.', 'Rem acerca una silla. La merienda sabe mejor con compañía.'],
+    ram: ['Ram levanta una ceja. Parece haber entendido la pregunta antes de escucharla.', 'Ram contempla el sendero. El silencio no implica que haya dejado de evaluar el trabajo.']
+};
+let thoughtIndex = 0;
+const thoughtNote = document.querySelector('.butterfly-note');
+document.querySelector('.butterfly-button').addEventListener('click', () => {
+    thoughtNote.textContent = thoughts[character][thoughtIndex++ % thoughts[character].length];
+    thoughtNote.hidden = false;
+});
+document.addEventListener('click', event => { if (!event.target.closest('.butterfly-button, .butterfly-note')) thoughtNote.hidden = true; });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') thoughtNote.hidden = true; });
+
+const motionButton = document.querySelector('.motion-button');
+function updateMotion() {
+    document.documentElement.classList.toggle('motion-paused', motionPaused);
+    motionButton.setAttribute('aria-pressed', String(motionPaused));
+    motionButton.setAttribute('aria-label', motionPaused ? 'Activar animaciones' : 'Pausar animaciones');
+    motionButton.querySelector('span').textContent = motionPaused ? '▷' : 'Ⅱ';
+    motionButton.querySelector('.motion-label').textContent = motionPaused ? 'En pausa' : 'En movimiento';
+}
+updateMotion();
+motionButton.addEventListener('click', () => { motionPaused = !motionPaused; updateMotion(); });
+motionPreference.addEventListener('change', () => { motionPaused = motionPreference.matches; updateMotion(); });
+const characterStage = document.querySelector('.character-stage');
+characterStage.addEventListener('pointermove', event => {
+    if (motionPaused || event.pointerType !== 'mouse') return;
+    const bounds = characterStage.getBoundingClientRect();
+    characterStage.style.setProperty('--pointer-x', ((event.clientX - bounds.left) / bounds.width - .5) * 7 + 'px');
+    characterStage.style.setProperty('--pointer-y', ((event.clientY - bounds.top) / bounds.height - .5) * 5 + 'px');
+});
+characterStage.addEventListener('pointerleave', () => {
+    characterStage.style.setProperty('--pointer-x', '0px');
+    characterStage.style.setProperty('--pointer-y', '0px');
+});

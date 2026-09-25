@@ -1,0 +1,10 @@
+@use '../style';
+
+.profile-page[data-theme='rose'] { --sheet: #efdcdf; --sheet-deep: #dcb9c1; --accent: #854251; }
+.swatch-rose { background: #a36776; }
+.profile-page .memory-card { background: var(--sheet-deep); }
+.profile-page .memory-card img { object-position: center 20%; }
+.scene-placeholder { display: grid; place-items: center; aspect-ratio: 806 / 1080; border: 1px dashed #686370; border-radius: 2px; background: var(--sheet); font-size: 14px; color: #343340; }
+.profile-page .player-toggle:disabled { cursor: default; color: #575461; }
+.profile-page[data-character='emilia'] .game-board { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.profile-page[data-character='rem'] .game-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }

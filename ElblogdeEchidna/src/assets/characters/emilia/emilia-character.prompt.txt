@@ -1,0 +1,5 @@
+Tool: built-in ImageGen edit
+Input: original generated portrait; intermediate PNG removed after WebP validation.
+Export: lossless WebP, 1024x1536, original generated alpha retained
+
+Edit this exact supplied anime character illustration for website compositing. Remove the entire pale ivory background, including every gap between hair, fingers, arms and clothing. Preserve the character identity, costume, face, pose, colors and held object. Do not redesign the illustration. Export with a GENUINE TRANSPARENT ALPHA CHANNEL, all empty background pixels alpha 0, not a white or black background and NOT a simulated checkerboard. No background pattern, no ground shadow, no halo or rectangular frame. Preserve fine hair edges and original 1024x1536 portrait composition. The character will be placed over a colored page, so the colored page must show through all background regions. Do not make white clothing or silver hair transparent. Keep the ice crystal/tray/branch as part of the foreground.
