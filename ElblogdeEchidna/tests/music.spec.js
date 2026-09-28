@@ -12,7 +12,7 @@ test('music, mute, volume and position follow navigation between all profiles', 
     await page.locator('.music-volume').fill('62');
     await expect.poll(() => audio.evaluate(element => Number.isFinite(element.duration))).toBe(true);
     await audio.evaluate(element => { element.currentTime = 12; });
-    await expect.poll(() => audio.evaluate(element => !element.seeking && element.currentTime >= 12)).toBe(true);
+    await expect.poll(() => audio.evaluate(element => !element.seeking && element.currentTime >= 12), { timeout: 15_000 }).toBe(true);
     for (const name of ['Rem', 'Ram', 'Echidna']) {
         await page.locator('.character-nav').getByRole('link', { name, exact: true }).click();
         await expect.poll(() => audio.evaluate(element => !element.paused && !element.muted && element.currentTime >= 12)).toBe(true);

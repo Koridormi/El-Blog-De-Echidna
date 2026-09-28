@@ -14,7 +14,8 @@ for (const character of characters) {
         expect(response.ok()).toBe(true);
         await expect(page).toHaveTitle(`${character} | Re:Zero Fan Space`);
         await expect(page.locator('.character-nav [aria-current="page"]')).toHaveText(character);
-        await expect(page.locator('.profile-status')).toHaveText('Perfil en preparación');
+        await expect(page.locator('.site-footer')).toContainText('Fan site no oficial');
+        await expect(page.locator('.profile-status')).toHaveCount(0);
 
         for (const width of widths) {
             await page.setViewportSize({ width, height: 900 });
@@ -48,7 +49,7 @@ test('character navigation works without JavaScript and returns to Echidna', asy
 });
 
 for (const character of characters) {
-    test(character + ': shared template, transparent WebP and placeholder controls', async ({ page }) => {
+    test(character + ': shared template, transparent WebP and scene playback', async ({ page }) => {
         await page.goto('/pages/characters/' + character.toLowerCase() + '.html');
         for (const selector of ['.character-sheet', '.character-copy', '.character-stage', '.memory-cards', '.mini-player', '.sheet-bottom']) {
             await expect(page.locator(selector)).toBeVisible();
@@ -66,8 +67,14 @@ for (const character of characters) {
         expect(pixels[0]).toBe(0);
         expect(pixels[1]).toBeGreaterThan(200);
         await expect(page.locator('.music-toggle')).toBeEnabled();
-        await expect(page.locator('.player-toggle')).toBeDisabled();
-        await expect(page.locator('.scene-placeholder')).toContainText('GIF pendiente');
+        await expect(page.locator('.player-toggle')).toBeEnabled();
+        await expect(page.locator('.scene-placeholder')).toHaveCount(0);
+        const scene = page.locator('.tea-animation');
+        await expect.poll(() => scene.evaluate(video => !video.paused && video.currentTime > 0 && video.videoWidth === 806 && video.videoHeight === 1080)).toBe(true);
+        await page.locator('.player-toggle').click();
+        await expect.poll(() => scene.evaluate(video => video.paused)).toBe(true);
+        await page.locator('.player-toggle').click();
+        await expect.poll(() => scene.evaluate(video => !video.paused)).toBe(true);
         await page.locator('.memory-card[data-chapter="secrets"]').click();
         await expect(page.locator('#secrets-panel')).toBeVisible();
         await page.locator('.secret-prev').click();
@@ -91,5 +98,35 @@ for (const character of characters) {
         await expect(page.locator('.butterfly-note')).not.toBeVisible();
         await page.locator('.motion-button').click();
         await expect(page.locator('html')).toHaveClass('motion-paused');
+        await expect.poll(() => scene.evaluate(video => video.paused)).toBe(true);
     });
 }
+
+for (const character of characters) {
+    test(character + ': reduced motion keeps the scene still until enabled', async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/pages/characters/' + character.toLowerCase() + '.html');
+        const scene = page.locator('.tea-animation');
+        await expect(page.locator('html')).toHaveClass('motion-paused');
+        await expect.poll(() => scene.evaluate(video => video.paused && video.currentTime === 0)).toBe(true);
+        await page.locator('.player-toggle').click();
+        await expect.poll(() => scene.evaluate(video => !video.paused && video.currentTime > 0)).toBe(true);
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await expect.poll(() => scene.evaluate(video => video.paused)).toBe(true);
+    });
+}
+
+test('headers and footers share branding, controls and external links', async ({ page }) => {
+    for (const route of ['/', ...characters.map(name => '/pages/characters/' + name.toLowerCase() + '.html')]) {
+        await page.goto(route);
+        await expect(page.locator('.brand')).toHaveAccessibleName('Re:Zero Fan Space, inicio en Echidna');
+        await expect(page.locator('.brand small')).toHaveText('RE:ZERO FAN SPACE');
+        await expect(page.locator('.chapter-nav button')).toHaveCount(3);
+        await expect(page.locator('.site-header .motion-button')).toBeEnabled();
+        await expect(page.locator('.site-header .music-toggle')).toBeEnabled();
+        await expect(page.locator('.footer-links a')).toHaveCount(2);
+        await expect(page.locator('.footer-links a').last()).toHaveAttribute('href', 'https://re-zero-anime.jp/');
+        await expect(page.locator('.footer-links a').last()).toHaveAttribute('rel', 'noreferrer');
+    }
+});

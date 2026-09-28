@@ -1,3 +1,4 @@
+import { isMotionPaused } from './scene-player.js';
 import './music.js';
 import './characters/echidna-game.js';
 
@@ -12,7 +13,7 @@ function selectChapter(name) {
     chapterPanels.forEach((panel) => { panel.hidden = panel.id !== `${name}-panel`; });
     document.querySelector('.chapter-indicator').firstChild.textContent = `0${activeChapter + 1} `;
     if (window.innerWidth < 768) {
-        document.querySelector('.chapter-panels').scrollIntoView({ block: 'center', behavior: motionPaused || motionPreference.matches ? 'instant' : 'smooth' });
+        document.querySelector('.chapter-panels').scrollIntoView({ block: 'center', behavior: isMotionPaused() ? 'instant' : 'smooth' });
     }
 }
 
@@ -84,69 +85,9 @@ dialog.addEventListener('click', (event) => {
     if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
 });
 
-const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-const motionButton = document.querySelector('.motion-button');
-const playerButton = document.querySelector('.player-toggle');
-const animationVideo = document.querySelector('.tea-animation');
-let motionPaused = motionPreference.matches;
-let resumeWhenVisible = false;
-
-function updatePlayer() {
-    const animationPlaying = !animationVideo.paused;
-    playerButton.setAttribute('aria-pressed', String(animationPlaying));
-    playerButton.setAttribute('aria-label', animationPlaying ? 'Pausar escena animada' : 'Reproducir escena animada');
-    playerButton.querySelector('.player-icon').textContent = animationPlaying ? 'Ⅱ' : '▷';
-    playerButton.querySelector('.player-label').textContent = animationPlaying ? 'Pausar escena' : 'Reproducir escena';
-}
-animationVideo.addEventListener('play', updatePlayer);
-animationVideo.addEventListener('pause', updatePlayer);
-animationVideo.muted = true;
-
-function setPlayback(playing) {
-    if (playing) animationVideo.play().catch(updatePlayer);
-    else animationVideo.pause();
-    updatePlayer();
-}
-
-function updateMotion() {
-    animationVideo.autoplay = !motionPaused;
-    document.documentElement.classList.toggle('motion-paused', motionPaused);
-    motionButton.setAttribute('aria-pressed', String(motionPaused));
-    motionButton.setAttribute('aria-label', motionPaused ? 'Activar animaciones' : 'Pausar animaciones');
-    motionButton.querySelector('span').textContent = motionPaused ? '▷' : 'Ⅱ';
-    motionButton.querySelector('.motion-label').textContent = motionPaused ? 'En pausa' : 'En movimiento';
-    setPlayback(!motionPaused && !document.hidden);
-}
-updateMotion();
-
-motionButton.addEventListener('click', () => {
-    motionPaused = !motionPaused;
-    updateMotion();
-});
-motionPreference.addEventListener('change', () => {
-    motionPaused = motionPreference.matches;
-    updateMotion();
-});
-playerButton.addEventListener('click', () => {
-    if (motionPaused) {
-        motionPaused = false;
-        updateMotion();
-    } else {
-        setPlayback(animationVideo.paused);
-    }
-});
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        resumeWhenVisible = !animationVideo.paused;
-        setPlayback(false);
-    } else if (resumeWhenVisible && !motionPaused) {
-        setPlayback(true);
-    }
-});
-
 const characterStage = document.querySelector('.character-stage');
 characterStage.addEventListener('pointermove', (event) => {
-    if (motionPaused || event.pointerType !== 'mouse') return;
+    if (isMotionPaused() || event.pointerType !== 'mouse') return;
     const bounds = characterStage.getBoundingClientRect();
     characterStage.style.setProperty('--pointer-x', `${((event.clientX - bounds.left) / bounds.width - .5) * 7}px`);
     characterStage.style.setProperty('--pointer-y', `${((event.clientY - bounds.top) / bounds.height - .5) * 5}px`);

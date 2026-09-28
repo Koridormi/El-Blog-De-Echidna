@@ -1,3 +1,4 @@
+import { isMotionPaused } from '../scene-player.js';
 import '../music.js';
 import './games.js';
 
@@ -5,16 +6,14 @@ const character = document.body.dataset.character;
 const chapterNames = ['profile', 'secrets', 'tea'];
 const chapterButtons = [...document.querySelectorAll('[data-chapter]')];
 const chapterPanels = [...document.querySelectorAll('.chapter-panel')];
-const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 let activeChapter = 0;
-let motionPaused = motionPreference.matches;
 
 function selectChapter(name) {
     activeChapter = chapterNames.indexOf(name);
     chapterButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.chapter === name)));
     chapterPanels.forEach(panel => { panel.hidden = panel.id !== name + '-panel'; });
     document.querySelector('.chapter-indicator').firstChild.textContent = '0' + (activeChapter + 1) + ' ';
-    if (window.innerWidth < 768) document.querySelector('.chapter-panels').scrollIntoView({ block: 'center', behavior: motionPaused ? 'instant' : 'smooth' });
+    if (window.innerWidth < 768) document.querySelector('.chapter-panels').scrollIntoView({ block: 'center', behavior: isMotionPaused() ? 'instant' : 'smooth' });
 }
 chapterButtons.forEach(button => button.addEventListener('click', () => selectChapter(button.dataset.chapter)));
 document.querySelector('.next-chapter').addEventListener('click', () => selectChapter(chapterNames[(activeChapter + 1) % chapterNames.length]));
@@ -63,20 +62,9 @@ document.querySelector('.butterfly-button').addEventListener('click', () => {
 document.addEventListener('click', event => { if (!event.target.closest('.butterfly-button, .butterfly-note')) thoughtNote.hidden = true; });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') thoughtNote.hidden = true; });
 
-const motionButton = document.querySelector('.motion-button');
-function updateMotion() {
-    document.documentElement.classList.toggle('motion-paused', motionPaused);
-    motionButton.setAttribute('aria-pressed', String(motionPaused));
-    motionButton.setAttribute('aria-label', motionPaused ? 'Activar animaciones' : 'Pausar animaciones');
-    motionButton.querySelector('span').textContent = motionPaused ? '▷' : 'Ⅱ';
-    motionButton.querySelector('.motion-label').textContent = motionPaused ? 'En pausa' : 'En movimiento';
-}
-updateMotion();
-motionButton.addEventListener('click', () => { motionPaused = !motionPaused; updateMotion(); });
-motionPreference.addEventListener('change', () => { motionPaused = motionPreference.matches; updateMotion(); });
 const characterStage = document.querySelector('.character-stage');
 characterStage.addEventListener('pointermove', event => {
-    if (motionPaused || event.pointerType !== 'mouse') return;
+    if (isMotionPaused() || event.pointerType !== 'mouse') return;
     const bounds = characterStage.getBoundingClientRect();
     characterStage.style.setProperty('--pointer-x', ((event.clientX - bounds.left) / bounds.width - .5) * 7 + 'px');
     characterStage.style.setProperty('--pointer-y', ((event.clientY - bounds.top) / bounds.height - .5) * 5 + 'px');

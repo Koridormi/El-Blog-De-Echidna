@@ -19,7 +19,14 @@ Los juegos no tienen límite de tiempo y permiten reiniciar. Sus reglas y mensaj
 
 La música requiere una primera activación explícita. Después conserva activación, silencio y volumen entre personajes y pestañas; recupera la posición al navegar en la misma pestaña. Si el navegador bloquea la reanudación, el botón permite iniciarla de nuevo. Los temas y el audio utilizan `localStorage`; la posición del audio utiliza `sessionStorage`.
 
-Echidna tiene una escena WebM sin sonido que se reproduce automáticamente salvo con movimiento reducido. Las escenas animadas de Emilia, Rem y Ram siguen pendientes y se identifican como placeholders.
+Los cuatro personajes tienen escenas animadas sin sonido. Se reproducen automáticamente salvo con movimiento reducido y pueden pausarse o reanudarse desde la página. Los GIF están en `media/animations/`; la web sirve versiones WebM de 806 × 1080 con póster WebP para reducir el peso y controlar la reproducción.
+
+- [Echidna: té al atardecer, mariposa y jardín](media/animations/echidna-scene.gif).
+- [Emilia: cristales y nieve](media/animations/emilia-scene.gif).
+- [Rem: parpadeo, cintas y fuego de la cocina](media/animations/rem-scene.gif).
+- [Ram: viento y hojas](media/animations/ram-scene.gif).
+
+Echidna y Emilia tienen ilustraciones creadas para sus escenas; Rem y Ram reutilizan sus ilustraciones de cocina y jardín con animaciones propias. El video anterior de Echidna se sustituyó por la escena nueva.
 
 [Ver el juego de Echidna en móvil](media/echidna-contract-mobile.png)
 
@@ -47,7 +54,7 @@ Si falta el navegador de pruebas, se instala con `npx playwright install chromiu
 
 ## Validación y accesibilidad
 
-Las **35 pruebas** cubren juegos, victoria y reinicio, curiosidades, navegación, estructura de expedientes, metadatos, carga de recursos, audio, animación y teclado. Se comprueban 375, 767, 768, 1023, 1024, 1199, 1200, 1399 y 1400 px.
+Las **39 pruebas** cubren juegos, victoria y reinicio, curiosidades, navegación, estructura de expedientes, metadatos, carga de recursos, audio, animación y teclado. Se comprueban 375, 767, 768, 1023, 1024, 1199, 1200, 1399 y 1400 px.
 
 La interfaz incluye enlace para saltar al contenido, controles etiquetados, foco visible, mensajes de juego anunciados, imágenes con alternativas textuales, cierre de expedientes con Escape y respeto por movimiento reducido. Estas comprobaciones son una revisión básica, no una certificación completa de accesibilidad.
 
@@ -63,25 +70,27 @@ ElblogdeEchidna/
 ├── src/
 │   ├── assets/
 │   │   ├── audio/            # Música compartida
-│   │   ├── images/           # Echidna y póster de su escena
+│   │   ├── images/           # Echidna y póster de su escena nueva
 │   │   ├── characters/       # Ilustraciones por personaje
-│   │   └── videos/           # Escena WebM
+│   │   └── videos/           # Escena WebM de Echidna
 │   ├── js/
 │   │   ├── main.js           # Interacciones de Echidna
 │   │   ├── music.js          # Preferencias y reproducción compartidas
 │   │   └── characters/      # Perfiles y juegos
 │   └── scss/                # Plantilla común y ajustes de personajes
 └── tests/
-media/                       # Capturas de este README, en la raíz del repo
+media/                       # Capturas y GIF de referencia, en la raíz del repo
 ```
 
-Los retratos `*-character.webp` conservan transparencia; `*-curiosities-card.webp`, `*-game-card.webp`, `echidna-contract-card.webp` y `*-dossier-scene.webp` tienen fondos ilustrados. Los prompts de generación se guardan junto a cada imagen. Se eliminaron imágenes obsoletas, PNG intermedios y el GIF original sin uso; se conserva el WebM que reproduce la web.
+Los retratos `*-character.webp` conservan transparencia; `*-curiosities-card.webp`, `*-game-card.webp`, `echidna-contract-card.webp` y `*-dossier-scene.webp` tienen fondos ilustrados. Los prompts de generación se guardan junto a las imágenes creadas. Las fuentes y scripts de animación quedan en `profiles/`, carpeta local ignorada por Git; los WebM, pósteres y GIF necesarios para la web y este README sí se conservan en el repositorio.
 
 ## SEO y publicación
 
 Las páginas incluyen títulos y descripciones propios, metadatos Open Graph y Twitter, idioma español y datos estructurados `WebPage`. Las imágenes sociales apuntan a recursos incluidos en la compilación.
 
-Publica el contenido completo de `ElblogdeEchidna/dist/`. Cuando exista un dominio definitivo, añade las URL canónicas, `og:url` y las URL absolutas de imágenes sociales; también podrá generarse el sitemap. No se incluye un dominio ficticio. Si el alojamiento usa un subdirectorio, ajusta la base de Vite para ese destino antes de compilar.
+Para publicar, ejecuta `npm ci` y `npm run build` dentro de `ElblogdeEchidna/`, y sirve el contenido completo de `ElblogdeEchidna/dist/` como sitio estático. El alojamiento debe permitir acceso directo a `/`, `/pages/characters/emilia.html`, `/pages/characters/rem.html` y `/pages/characters/ram.html`, además de los archivos en `assets/`. Comprueba estas cuatro rutas una vez desplegadas. Si el alojamiento usa un subdirectorio, ajusta la base de Vite para ese destino antes de compilar.
+
+Antes de publicar con un dominio definitivo, añade las URL canónicas, `og:url` y las URL absolutas de imágenes sociales; entonces podrá generarse el sitemap. No se incluye un dominio ficticio. La compilación y las rutas locales se pueden validar sin esas URL, pero las vistas previas sociales y la indexación final requieren el dominio real.
 
 `.gitignore` excluye dependencias, compilaciones, resultados de pruebas y archivos locales o de credenciales. Todo recurso servido por el navegador es público.
 

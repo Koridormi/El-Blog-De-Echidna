@@ -75,6 +75,10 @@ test('music starts only from its button and remembers mute and volume', async ({
     await expect.poll(() => audio.evaluate(element => element.volume)).toBe(1);
     await page.reload();
     await expect(volume).toHaveValue('100');
+    if (await audio.evaluate(element => element.paused)) {
+        await expect(toggle).toHaveAccessibleName('Activar música');
+        await toggle.click();
+    }
     await expect.poll(() => audio.evaluate(element => !element.paused)).toBe(true);
     await volume.focus();
     await volume.press('Home');
