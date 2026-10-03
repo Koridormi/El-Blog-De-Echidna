@@ -1,7 +1,5 @@
 @use '../style';
 
-.profile-page[data-theme='rose'] { --sheet: #efdcdf; --sheet-deep: #dcb9c1; --accent: #854251; }
-.swatch-rose { background: #a36776; }
 .profile-page .memory-card { background: var(--sheet-deep); }
 .profile-page .memory-card img { object-position: center 20%; }
 .profile-page[data-character='emilia'] .game-board { grid-template-columns: repeat(4, minmax(0, 1fr)); }

@@ -1,0 +1,7 @@
+Generated with image_gen for the Rem profile scene.
+
+Original portrait anime illustration of Rem from Re:Zero sitting beside an open Gothic garden window at night. Short sky-blue bob covering her left eye, visible blue right eye, white floral maid headband, pink crossed hairpins, black-and-white maid outfit. A gentle candid smile as she watches a glowing blue butterfly above her open hand. Moonlit blue garden and fountain on the left; amber lantern on the right. Full opaque illustrated background, crisp face and hands, no text or interface.
+
+Cleanplate edit: remove only the glowing butterfly and its immediate surrounding sparkles, preserving the composition and character. The animation uses the original character pixels throughout; the cleanplate is blended only into the small butterfly region. Independent butterfly flutter, garden fireflies, petals, water ripples, and lantern light form a 5-second loop. No facial deformation or blink morphing.
+
+Local source images and renderer: profiles/CharacterScenes/rem/ (ignored by Git).

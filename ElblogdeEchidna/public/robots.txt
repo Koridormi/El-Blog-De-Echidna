@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://echidna-blog.netlify.app/sitemap.xml

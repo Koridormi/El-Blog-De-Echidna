@@ -2,11 +2,13 @@
 
 Fan site de **Echidna, Emilia, Rem y Ram**, construido con HTML, JavaScript nativo, SCSS y Vite. Echidna es la página de inicio; los enlaces entre personajes funcionan también sin JavaScript.
 
+[Visitar el sitio oficial](https://echidna-blog.netlify.app/)
+
 ![Perfil de Echidna en escritorio](media/echidna-desktop.png)
 
 ## Explorar y jugar
 
-Cada perfil comparte tres capítulos, seis curiosidades, un expediente ilustrado, temas de color y controles de movimiento y música.
+Cada perfil comparte tres capítulos, seis curiosidades, un expediente ilustrado, las mismas tres paletas (lavanda, azul hielo y rosa empolvado) y controles de movimiento y música. Echidna y Emilia comienzan en lavanda, Rem en azul hielo y Ram en rosa empolvado. La selección del visitante se recuerda por personaje y tiene prioridad sobre el ambiente predeterminado.
 
 | Personaje | Juego |
 | --- | --- |
@@ -23,10 +25,10 @@ Los cuatro personajes tienen escenas animadas sin sonido. Se reproducen automát
 
 - [Echidna: té al atardecer, mariposa y jardín](media/animations/echidna-scene.gif).
 - [Emilia: cristales y nieve](media/animations/emilia-scene.gif).
-- [Rem: parpadeo, cintas y fuego de la cocina](media/animations/rem-scene.gif).
+- [Rem: mariposa luminosa y jardín bajo la luna](media/animations/rem-moonlit-garden.gif).
 - [Ram: viento y hojas](media/animations/ram-scene.gif).
 
-Echidna y Emilia tienen ilustraciones creadas para sus escenas; Rem y Ram reutilizan sus ilustraciones de cocina y jardín con animaciones propias.
+Echidna, Emilia y Rem tienen ilustraciones creadas para sus escenas; Ram reutiliza su ilustración de jardín con animación propia. La escena de Rem conserva el rostro sin deformaciones y anima por separado la mariposa, las luces, los pétalos y los reflejos de la fuente.
 
 [Ver el juego de Echidna en móvil](media/echidna-contract-mobile.png)
 
@@ -55,7 +57,7 @@ Si falta el navegador de pruebas, se instala con `npx playwright install chromiu
 
 ## Validación y accesibilidad
 
-La suite contiene **39 pruebas en siete archivos** que cubren juegos, victoria y reinicio, curiosidades, navegación, estructura de expedientes, metadatos, carga de recursos, audio, animación y teclado. Se comprueban 375, 767, 768, 1023, 1024, 1199, 1200, 1399 y 1400 px. La cobertura de audio contempla la recuperación mediante el botón cuando el navegador bloquea la reproducción tras recargar.
+La suite contiene **40 pruebas en siete archivos** que cubren juegos, victoria y reinicio, curiosidades, navegación, estructura de expedientes, metadatos, canónicas, sitemap, carga de recursos, audio, animación y teclado. Se comprueban 375, 767, 768, 1023, 1024, 1199, 1200, 1399 y 1400 px. La cobertura de audio contempla la recuperación mediante el botón cuando el navegador bloquea la reproducción tras recargar.
 
 La interfaz incluye enlace para saltar al contenido, controles etiquetados, foco visible, mensajes de juego anunciados, imágenes con alternativas textuales, cierre de expedientes con Escape y respeto por movimiento reducido. Estas comprobaciones son una revisión básica, no una certificación completa de accesibilidad.
 
@@ -68,7 +70,7 @@ El-Blog-Echidna/
 ├── ElblogdeEchidna/
 │   ├── index.html                  # Perfil de Echidna
 │   ├── pages/characters/           # Emilia, Rem y Ram
-│   ├── public/echidna-icon.svg
+│   ├── public/                    # Icono, robots.txt, sitemap.xml e imágenes sociales
 │   ├── src/
 │   │   ├── assets/
 │   │   │   ├── audio/             # Música compartida
@@ -93,7 +95,9 @@ Los retratos `*-character.webp` conservan transparencia; `*-curiosities-card.web
 
 ## SEO y publicación
 
-Las páginas incluyen títulos y descripciones propios, metadatos Open Graph y Twitter, idioma español y datos estructurados `WebPage`. Las imágenes sociales apuntan a recursos incluidos en la compilación.
+El dominio oficial es [echidna-blog.netlify.app](https://echidna-blog.netlify.app/). Las cuatro páginas tienen títulos y descripciones propios, canónicas absolutas, `og:url`, metadatos Open Graph y Twitter, idioma español y datos estructurados `WebPage` con sus URL definitivas.
+
+`public/social/` contiene las imágenes sociales JPEG de 1200 × 800 px, optimizadas y con rutas estables. `public/robots.txt` permite el rastreo y referencia `sitemap.xml`, que incluye únicamente las cuatro páginas canónicas. Vite copia estos recursos a `dist/` al compilar. No hay dominios de ejemplo, fechas de actualización ficticias ni etiquetas de verificación pendientes.
 
 Desde `ElblogdeEchidna/`, comprueba la compilación que vas a publicar:
 
@@ -105,9 +109,9 @@ npm run preview
 
 La vista previa sirve `dist/` en [http://127.0.0.1:4173](http://127.0.0.1:4173). Comprueba también la suite con `npm test`; Playwright usa el servidor de desarrollo configurado, no el de vista previa.
 
-Publica el contenido completo de `ElblogdeEchidna/dist/` como sitio estático. No requiere un servidor de aplicación ni una base de datos. El alojamiento debe permitir acceso directo a `/`, `/pages/characters/emilia.html`, `/pages/characters/rem.html` y `/pages/characters/ram.html`, además de los archivos en `assets/`. Comprueba estas cuatro rutas una vez desplegadas. Si el alojamiento usa un subdirectorio, ajusta la base de Vite y verifica los enlaces de navegación para ese destino antes de publicar.
+En Netlify, la carpeta base es `ElblogdeEchidna`, el comando de compilación es `npm run build` y la carpeta de publicación es `dist`. No requiere un servidor de aplicación ni una base de datos. Publica la compilación completa para conservar `/`, `/pages/characters/emilia.html`, `/pages/characters/rem.html` y `/pages/characters/ram.html`, además de `assets/`, `social/`, `robots.txt` y `sitemap.xml`.
 
-Antes de publicar con un dominio definitivo, añade las URL canónicas, `og:url` y las URL absolutas de imágenes sociales; entonces podrá generarse el sitemap. No se incluye un dominio ficticio. La compilación y las rutas locales se pueden validar sin esas URL, pero las vistas previas sociales y la indexación final requieren el dominio real.
+Los cambios del código se reflejan en el sitio público tras el siguiente despliegue. Después de publicar, comprueba las cuatro páginas, las imágenes sociales, `robots.txt` y `sitemap.xml` en el dominio oficial.
 
 `.gitignore` excluye dependencias, compilaciones, resultados de pruebas y archivos locales o de credenciales. Todo recurso servido por el navegador es público.
 
